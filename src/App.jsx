@@ -51,13 +51,24 @@ export default function App() {
   const [activeTab, setActiveTab] = useState('scanner');
   const [currentScanResult, setCurrentScanResult] = useState(null);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [scanHistory, setScanHistory] = useState([]);
-  const [apiKey, setApiKey] = useState('');
+  const [scanHistory, setScanHistory] = useState(() => {
+    try {
+      const saved = localStorage.getItem('nutrisense_ai_history');
+      return saved ? JSON.parse(saved) : [];
+    } catch (e) {
+      console.warn('Failed to load scan history:', e);
+      return [];
+    }
+  });
+  const [apiKey, setApiKey] = useState(() => {
+    const saved = localStorage.getItem('nutrisense_ai_gemini_key');
+    return saved || import.meta.env.VITE_GEMINI_API_KEY || '';
+  });
   const [isApiModalOpen, setIsApiModalOpen] = useState(false);
   const [isFaceModalOpen, setIsFaceModalOpen] = useState(false);
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [isCommunityModalOpen, setIsCommunityModalOpen] = useState(false);
-  const [userPrefs, setUserPrefs] = useState({ allergens: [], dietRestrictions: [] });
+  const [userPrefs, setUserPrefs] = useState(() => getUserPreferences());
   const [compareList, setCompareList] = useState([]);
   const [dbVersion, setDbVersion] = useState(0);
   const [products, setProducts] = useState([]);
@@ -247,27 +258,13 @@ export default function App() {
     return Boolean(name && compareList.some((p) => (p.product_name || p.name) === name));
   }, [currentScanResult, compareList]);
 
-  // Load local storage initial state and default Doritos preset on startup
+  // Load the default Doritos preset on startup for immediate demonstration.
+  // localStorage state (history, api key, profile) is initialized lazily above,
+  // so this effect only needs to run once with a stable identity.
   useEffect(() => {
-    try {
-      const savedHistory = localStorage.getItem('nutrisense_ai_history');
-      if (savedHistory) setScanHistory(JSON.parse(savedHistory));
-
-      const savedKey = localStorage.getItem('nutrisense_ai_gemini_key');
-      if (savedKey) {
-        setApiKey(savedKey);
-      } else if (import.meta.env.VITE_GEMINI_API_KEY) {
-        setApiKey(import.meta.env.VITE_GEMINI_API_KEY);
-      }
-    } catch (e) {
-      console.warn('LocalStorage error:', e);
-    }
-
-    setUserPrefs(getUserPreferences());
-
-    // Default load Doritos preset on startup for immediate demonstration
     handleSelectPreset(SAMPLE_FOOD_PACKAGES[0].id, false);
-  }, [handleSelectPreset]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const openFromDatabase = (product) => {
     setCurrentScanResult({
