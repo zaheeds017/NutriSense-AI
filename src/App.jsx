@@ -254,7 +254,11 @@ export default function App() {
       if (savedHistory) setScanHistory(JSON.parse(savedHistory));
 
       const savedKey = localStorage.getItem('nutrisense_ai_gemini_key');
-      if (savedKey) setApiKey(savedKey);
+      if (savedKey) {
+        setApiKey(savedKey);
+      } else if (import.meta.env.VITE_GEMINI_API_KEY) {
+        setApiKey(import.meta.env.VITE_GEMINI_API_KEY);
+      }
     } catch (e) {
       console.warn('LocalStorage error:', e);
     }
