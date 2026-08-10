@@ -15,6 +15,7 @@ export default function CameraScanner({ onCaptureLabel, onSelectPreset, onFaceAu
   const [isScanning] = useState(true);
   const [errorMsg, setErrorMsg] = useState('');
   const [realtimeFaceDetected, setRealtimeFaceDetected] = useState(false);
+  const [faceConfidence, setFaceConfidence] = useState(0);
 
   // 1. Initialize camera stream
   useEffect(() => {
@@ -59,7 +60,7 @@ export default function CameraScanner({ onCaptureLabel, onSelectPreset, onFaceAu
   useEffect(() => {
     let rafId = null;
     let lastCheck = 0;
-    const CHECK_INTERVAL = 250;
+    const CHECK_INTERVAL = 200;
 
     const runRealtimeFaceCheck = async (timestamp) => {
       if (timestamp - lastCheck >= CHECK_INTERVAL && videoRef.current && videoRef.current.readyState >= 2) {
@@ -67,6 +68,7 @@ export default function CameraScanner({ onCaptureLabel, onSelectPreset, onFaceAu
         try {
           const faceRes = await detectHumanFace(videoRef.current);
           const hasFace = Boolean(faceRes && faceRes.hasFace);
+          setFaceConfidence(faceRes && faceRes.confidence ? faceRes.confidence : 0);
           setRealtimeFaceDetected(hasFace);
 
           // Fire alert (beep + modal) only on the rising edge of detection
@@ -186,6 +188,11 @@ export default function CameraScanner({ onCaptureLabel, onSelectPreset, onFaceAu
                 <p className="text-xs font-bold text-amber-300 bg-slate-950/80 px-3 py-1 rounded-lg border border-amber-500/30">
                   Please align a packaged food label in frame
                 </p>
+                {faceConfidence > 0 && (
+                  <p className="text-[10px] font-bold text-amber-200/80 bg-slate-950/60 px-2 py-0.5 rounded-lg border border-amber-500/20">
+                    Confidence {Math.round(faceConfidence * 100)}% • Live
+                  </p>
+                )}
               </div>
             ) : (
               /* Corner Targeting Guides for Food Package */
