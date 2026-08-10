@@ -23,22 +23,6 @@ export default function App() {
   const [isApiModalOpen, setIsApiModalOpen] = useState(false);
   const [isFaceModalOpen, setIsFaceModalOpen] = useState(false);
 
-  // Load local storage initial state
-  useEffect(() => {
-    try {
-      const savedHistory = localStorage.getItem('nutripulse_history');
-      if (savedHistory) setScanHistory(JSON.parse(savedHistory));
-
-      const savedKey = localStorage.getItem('nutripulse_gemini_key');
-      if (savedKey) setApiKey(savedKey);
-    } catch (e) {
-      console.warn('LocalStorage error:', e);
-    }
-
-    // Default load Doritos preset on startup for immediate demonstration
-    handleSelectPreset(SAMPLE_FOOD_PACKAGES[0].id, false);
-  }, [handleSelectPreset]);
-
   // Save history to localStorage
   const saveScanToHistory = useCallback((scanItem) => {
     const newItem = {
@@ -116,6 +100,22 @@ export default function App() {
     handleProcessScan(data, true);
     setActiveTab('dashboard');
   };
+
+  // Load local storage initial state and default Doritos preset on startup
+  useEffect(() => {
+    try {
+      const savedHistory = localStorage.getItem('nutripulse_history');
+      if (savedHistory) setScanHistory(JSON.parse(savedHistory));
+
+      const savedKey = localStorage.getItem('nutripulse_gemini_key');
+      if (savedKey) setApiKey(savedKey);
+    } catch (e) {
+      console.warn('LocalStorage error:', e);
+    }
+
+    // Default load Doritos preset on startup for immediate demonstration
+    handleSelectPreset(SAMPLE_FOOD_PACKAGES[0].id, false);
+  }, [handleSelectPreset]);
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 font-sans selection:bg-emerald-500 selection:text-slate-950 flex flex-col justify-between">
