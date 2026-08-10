@@ -2,10 +2,12 @@ import React, { useRef, useState, useEffect } from 'react';
 import { Camera, RefreshCw, Zap, Sliders, ScanLine, Sparkles, UserCheck } from 'lucide-react';
 import { SAMPLE_FOOD_PACKAGES } from '../utils/sampleDatabase';
 import { detectHumanFace } from '../utils/faceDetector';
+import { SOUNDS } from '../utils/soundUtils';
 
 export default function CameraScanner({ onCaptureLabel, onSelectPreset, onFaceAutoDetected }) {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
+  const wasFaceDetectedRef = useRef(false);
 
   const [facingMode, setFacingMode] = useState('environment'); // 'environment' | 'user'
   const [flash, setFlash] = useState(false);
@@ -53,31 +55,39 @@ export default function CameraScanner({ onCaptureLabel, onSelectPreset, onFaceAu
     };
   }, [facingMode]);
 
-  // 2. Real-Time Auto Face Detection Loop (Runs continuous check on video stream frames)
+  // 2. Real-Time Auto Face Detection Loop (requestAnimationFrame + throttled frame analysis)
   useEffect(() => {
-    let intervalId = null;
+    let rafId = null;
+    let lastCheck = 0;
+    const CHECK_INTERVAL = 250;
 
-    const runRealtimeFaceCheck = async () => {
-      if (!videoRef.current || videoRef.current.readyState < 2) return;
-      try {
-        const faceRes = await detectHumanFace(videoRef.current);
-        if (faceRes && faceRes.hasFace) {
-          setRealtimeFaceDetected(true);
-          if (onFaceAutoDetected) {
-            onFaceAutoDetected();
+    const runRealtimeFaceCheck = async (timestamp) => {
+      if (timestamp - lastCheck >= CHECK_INTERVAL && videoRef.current && videoRef.current.readyState >= 2) {
+        lastCheck = timestamp;
+        try {
+          const faceRes = await detectHumanFace(videoRef.current);
+          const hasFace = Boolean(faceRes && faceRes.hasFace);
+          setRealtimeFaceDetected(hasFace);
+
+          // Fire alert (beep + modal) only on the rising edge of detection
+          if (hasFace && !wasFaceDetectedRef.current) {
+            wasFaceDetectedRef.current = true;
+            SOUNDS.faceDetected();
+            if (onFaceAutoDetected) onFaceAutoDetected();
+          } else if (!hasFace) {
+            wasFaceDetectedRef.current = false;
           }
-        } else {
-          setRealtimeFaceDetected(false);
+        } catch (err) {
+          console.warn('Realtime face check error:', err);
         }
-      } catch (err) {
-        console.warn('Realtime face check error:', err);
       }
+      rafId = requestAnimationFrame(runRealtimeFaceCheck);
     };
 
-    intervalId = setInterval(runRealtimeFaceCheck, 400);
+    rafId = requestAnimationFrame(runRealtimeFaceCheck);
 
     return () => {
-      if (intervalId) clearInterval(intervalId);
+      if (rafId) cancelAnimationFrame(rafId);
     };
   }, [onFaceAutoDetected]);
 
@@ -109,6 +119,8 @@ export default function CameraScanner({ onCaptureLabel, onSelectPreset, onFaceAu
   // Manual Trigger for Face Simulation Test
   const handleSimulateFaceDetection = () => {
     setRealtimeFaceDetected(true);
+    wasFaceDetectedRef.current = true;
+    SOUNDS.faceDetected();
     if (onFaceAutoDetected) {
       onFaceAutoDetected();
     }

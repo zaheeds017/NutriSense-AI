@@ -11,6 +11,7 @@ import HumanFaceAlertModal from './components/HumanFaceAlertModal';
 
 import { parseNutritionLabel } from './utils/ocrEngine';
 import { SAMPLE_FOOD_PACKAGES } from './utils/sampleDatabase';
+import { SOUNDS } from './utils/soundUtils';
 import confetti from 'canvas-confetti';
 import { Scan } from 'lucide-react';
 
@@ -32,7 +33,7 @@ export default function App() {
     setScanHistory((prev) => {
       const updated = [newItem, ...prev];
       try {
-        localStorage.setItem('nutripulse_history', JSON.stringify(updated));
+        localStorage.setItem('nutrisense_ai_history', JSON.stringify(updated));
       } catch (err) {
         console.warn('Failed to save scan history:', err);
       }
@@ -43,7 +44,7 @@ export default function App() {
   const handleClearHistory = () => {
     setScanHistory([]);
     try {
-      localStorage.removeItem('nutripulse_history');
+      localStorage.removeItem('nutrisense_ai_history');
     } catch {
       // Ignore storage errors
     }
@@ -52,7 +53,7 @@ export default function App() {
   const handleSaveApiKey = (key) => {
     setApiKey(key);
     try {
-      localStorage.setItem('nutripulse_gemini_key', key);
+      localStorage.setItem('nutrisense_ai_gemini_key', key);
     } catch {
       // Ignore storage errors
     }
@@ -61,6 +62,7 @@ export default function App() {
   // Process label extraction
   const handleProcessScan = useCallback(async (scanOptions, isUserInitiated = true) => {
     setIsProcessing(true);
+    if (isUserInitiated) SOUNDS.scanStart();
     try {
       const result = await parseNutritionLabel({
         ...scanOptions,
@@ -69,12 +71,14 @@ export default function App() {
 
       // Check if Human Face was detected
       if (result.isHumanFace) {
+        SOUNDS.faceDetected();
         setIsFaceModalOpen(true);
         return;
       }
 
       setCurrentScanResult(result);
       if (isUserInitiated) {
+        SOUNDS.scanSuccess();
         saveScanToHistory(result);
         confetti({
           particleCount: 50,
@@ -84,10 +88,16 @@ export default function App() {
       }
     } catch (err) {
       console.error('Scan processing error:', err);
+      if (isUserInitiated) SOUNDS.scanError();
     } finally {
       setIsProcessing(false);
     }
   }, [apiKey, saveScanToHistory]);
+
+  // Stable callback for real-time face auto-detection from the live scanner
+  const handleFaceAutoDetected = useCallback(() => {
+    setIsFaceModalOpen(true);
+  }, []);
 
   // Preset quick click
   const handleSelectPreset = useCallback((sampleId, isUserInitiated = true) => {
@@ -104,10 +114,10 @@ export default function App() {
   // Load local storage initial state and default Doritos preset on startup
   useEffect(() => {
     try {
-      const savedHistory = localStorage.getItem('nutripulse_history');
+      const savedHistory = localStorage.getItem('nutrisense_ai_history');
       if (savedHistory) setScanHistory(JSON.parse(savedHistory));
 
-      const savedKey = localStorage.getItem('nutripulse_gemini_key');
+      const savedKey = localStorage.getItem('nutrisense_ai_gemini_key');
       if (savedKey) setApiKey(savedKey);
     } catch (e) {
       console.warn('LocalStorage error:', e);
@@ -152,7 +162,7 @@ export default function App() {
               <CameraScanner
                 onCaptureLabel={handleCaptureLabel}
                 onSelectPreset={handleSelectPreset}
-                onFaceAutoDetected={() => setIsFaceModalOpen(true)}
+                onFaceAutoDetected={handleFaceAutoDetected}
               />
               
               {/* Quick Result Preview under scanner */}
@@ -215,7 +225,7 @@ export default function App() {
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="flex items-center gap-2">
             <Scan className="w-4 h-4 text-emerald-400" />
-            <span className="font-semibold text-slate-300">NutriPulse Computer Vision & Face Detection Engine</span>
+            <span className="font-semibold text-slate-300">NutriSense_AI Computer Vision & Face Detection Engine</span>
           </div>
           <span>Conforms strictly to FDA / EU Standard Nutritional Measurement Schemas</span>
         </div>

@@ -1,6 +1,6 @@
-# NutriPulse - Packaged Food Nutrition Scanner & AI Vision
+# NutriSense_AI - Packaged Food Nutrition Scanner & AI Vision
 
-NutriPulse is a client-side web app that scans packaged food nutrition labels and ingredients lists, then extracts, validates, and visualizes the data against FDA/EU-standard nutritional schemas.
+NutriSense_AI is a client-side web app that scans packaged food nutrition labels and ingredients lists, then extracts, validates, and visualizes the data against FDA/EU-standard nutritional schemas.
 
 It combines real-time camera capture, client-side OCR (Tesseract.js), optional Google Gemini multimodal vision, and a human-face detection filter that blocks non-food scans.
 

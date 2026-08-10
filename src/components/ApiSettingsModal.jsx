@@ -46,7 +46,7 @@ export default function ApiSettingsModal({ isOpen, onClose, apiKey, onSaveApiKey
             <Sparkles className="w-4 h-4" /> Client-Side Rule OCR Engine Active
           </p>
           <p className="text-[11px] text-slate-400">
-            NutriPulse extracts nutrition facts using built-in computer vision rule engines out of the box. Adding a Google Gemini API Key enables direct LLM vision label reading for complex or curved food packages.
+            NutriSense_AI extracts nutrition facts using built-in computer vision rule engines out of the box. Adding a Google Gemini API Key enables direct LLM vision label reading for complex or curved food packages.
           </p>
         </div>
 
