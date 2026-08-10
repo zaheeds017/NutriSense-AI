@@ -7,24 +7,33 @@ import { validateAndNormalizeSchema } from './jsonSchemaValidator.js';
 import { SAMPLE_FOOD_PACKAGES } from './sampleDatabase.js';
 import { analyzeIngredientsList } from './healthAnalyzer.js';
 import { detectHumanFace } from './faceDetector.js';
+import { enrichWithHealth } from './rulesEngine.js';
+import { getProductByBarcode, addProduct } from './productDatabase.js';
+import { fetchOpenFoodFactsProduct } from './openFoodFacts.js';
 
 /**
  * Extracts structured nutrition data from image/canvas or raw text.
- * @param {Object} options - { imageSource, rawText, apiKey, sampleId }
+ * @param {Object} options - { imageSource, rawText, apiKey, sampleId, productName, brand, userPrefs }
  */
 export async function parseNutritionLabel(options = {}) {
-  const { imageSource, rawText, apiKey, sampleId } = options;
+  const { imageSource, rawText, apiKey, sampleId, productName, brand, userPrefs } = options;
 
   // 1. If user selected a preset sample item, return its pre-parsed target JSON
   if (sampleId) {
     const sample = SAMPLE_FOOD_PACKAGES.find(s => s.id === sampleId);
     if (sample) {
+      const enriched = enrichWithHealth(
+        { ...sample.extractedJson, product_name: sample.name, brand: sample.brand, category: sample.category, barcode: sample.barcode, image_url: sample.imageUrl },
+        sample.name,
+        sample.brand,
+        userPrefs
+      );
       return {
         success: true,
         isHumanFace: false,
         source: 'Preset Sample Package',
         rawText: sample.ocrRawText.trim(),
-        data: sample.extractedJson,
+        data: enriched,
         sampleMeta: sample
       };
     }
@@ -55,11 +64,12 @@ export async function parseNutritionLabel(options = {}) {
       const geminiResult = await runGeminiVisionAnalysis(imageSource, apiKey);
       if (geminiResult && geminiResult.macros) {
         const validated = validateAndNormalizeSchema(geminiResult);
+        const enriched = enrichWithHealth(validated.normalizedData, productName, brand, userPrefs);
         return {
           success: true,
           source: 'Gemini AI Multimodal Vision',
           rawText: geminiResult._rawOcr || 'Extracted via Gemini Vision API',
-          data: validated.normalizedData
+          data: enriched
         };
       }
     } catch (err) {
@@ -82,12 +92,73 @@ export async function parseNutritionLabel(options = {}) {
   // 4. Rule-Based Natural Language & Regex Extraction
   const extractedRaw = parseTextWithRegexRules(textToParse);
   const validated = validateAndNormalizeSchema(extractedRaw);
+  const enriched = enrichWithHealth(validated.normalizedData, productName, brand, userPrefs);
 
   return {
     success: true,
     source: textToParse ? 'Client OCR + Regex Parser' : 'Intelligent Parser',
     rawText: textToParse || 'No legible text detected on image',
-    data: validated.normalizedData
+    data: enriched
+  };
+}
+
+/**
+ * Barcode scan pipeline: local product database → Open Food Facts live lookup.
+ * @param {string} barcode - UPC/EAN code
+ * @param {Object} userPrefs - allergen/diet profile
+ */
+export async function parseBarcode(barcode, userPrefs) {
+  const clean = String(barcode || '').trim();
+  if (!clean) {
+    return { success: false, isHumanFace: false, message: 'Please provide a valid barcode.' };
+  }
+
+  // 1. Local product database (seed + community + previously cached)
+  const localProduct = getProductByBarcode(clean);
+  if (localProduct) {
+    return {
+      success: true,
+      isHumanFace: false,
+      source: 'Barcode Database Lookup',
+      rawText: `Matched barcode ${clean} in the built-in product catalog (${localProduct.name}).`,
+      data: localProduct.analysis,
+      sampleMeta: null,
+      productRecord: localProduct,
+      scanType: 'barcode'
+    };
+  }
+
+  // 2. Live Open Food Facts lookup
+  const offAnalysis = await fetchOpenFoodFactsProduct(clean, userPrefs);
+  if (offAnalysis) {
+    const cached = addProduct({
+      name: offAnalysis.product_name || 'Scanned Food Product',
+      brand: offAnalysis.brand || 'Open Food Facts Item',
+      barcode: clean,
+      category: offAnalysis.category || 'General Food',
+      imageUrl: offAnalysis.image_url,
+      analysis: offAnalysis,
+      isCommunity: false,
+    });
+    return {
+      success: true,
+      isHumanFace: false,
+      source: 'Barcode Scan (Open Food Facts)',
+      rawText: `Live product data retrieved from Open Food Facts for barcode ${clean}.`,
+      data: offAnalysis,
+      sampleMeta: null,
+      productRecord: cached,
+      scanType: 'barcode'
+    };
+  }
+
+  return {
+    success: false,
+    isHumanFace: false,
+    source: 'Barcode Scan',
+    rawText: '',
+    notFound: true,
+    message: `Barcode ${clean} not found in the catalog or Open Food Facts. Capture the ingredients label or add the product manually.`
   };
 }
 

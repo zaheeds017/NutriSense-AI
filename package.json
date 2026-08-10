@@ -13,6 +13,7 @@
     "@zxing/browser": "^0.2.1",
     "@zxing/library": "^0.23.0",
     "canvas-confetti": "^1.9.4",
+    "html5-qrcode": "^2.3.8",
     "lucide-react": "^1.31.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",

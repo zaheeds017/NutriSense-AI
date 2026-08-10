@@ -42,8 +42,8 @@ export default function NutritionDashboard({ scanResult, onOpenJsonView }) {
       {/* Top Banner: Product Title / Source & JSON Switcher */}
       <div className="p-6 rounded-3xl bg-slate-900/90 border border-slate-800 backdrop-blur-xl shadow-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div className="flex items-center gap-4">
-          {sampleMeta?.imageUrl ? (
-            <img src={sampleMeta.imageUrl} alt="Package" className="w-16 h-16 rounded-2xl object-cover border border-slate-700 shadow-md" />
+          {sampleMeta?.imageUrl || data.image_url ? (
+            <img src={sampleMeta?.imageUrl || data.image_url} alt="Package" className="w-16 h-16 rounded-2xl object-cover border border-slate-700 shadow-md" />
           ) : (
             <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-emerald-500 to-teal-400 p-0.5 shadow-lg shadow-emerald-500/20">
               <div className="w-full h-full bg-slate-950 rounded-[14px] flex items-center justify-center text-emerald-400 font-bold">
@@ -57,13 +57,19 @@ export default function NutritionDashboard({ scanResult, onOpenJsonView }) {
               <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-bold uppercase tracking-wider">
                 {source || 'AI Vision Extracted'}
               </span>
+              {data.barcode && (
+                <span className="px-2.5 py-0.5 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 text-[10px] font-bold uppercase tracking-wider">
+                  UPC: {data.barcode}
+                </span>
+              )}
               <span className="text-xs text-slate-400">
                 Serving: <strong className="text-slate-200">{serving_info.serving_size || '1 Portion'}</strong>
               </span>
             </div>
             <h2 className="text-xl font-extrabold text-white tracking-tight mt-0.5">
-              {sampleMeta?.name || 'Extracted Packaged Food Item'}
+              {sampleMeta?.name || data.product_name || 'Extracted Packaged Food Item'}
             </h2>
+            {data.brand && <p className="text-xs text-slate-400 mt-0.5">{data.brand}</p>}
           </div>
         </div>
 
