@@ -1,69 +1,37 @@
 {
-  "name": "nutrition-scanner-app",
+  "name": "react-example",
   "private": true,
-  "version": "1.0.0",
+  "version": "0.0.0",
   "type": "module",
-  "description": "NutriSense_AI - packaged food nutrition scanner with health scoring, barcode & text analysis",
-  "author": "Zaheed",
-  "main": "electron/main.cjs",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "lint": "oxlint",
-    "preview": "vite preview",
-    "app": "concurrently -k \"vite preview --port 4173 --strictPort\" \"wait-on http://localhost:4173 && electron .\"",
-    "app:build": "npm run build && electron-builder --win nsis portable",
-    "app:dir": "npm run build && electron-builder --dir"
+    "dev": "tsx server.ts",
+    "build": "vite build && esbuild server.ts --bundle --platform=node --format=cjs --packages=external --sourcemap --outfile=dist/server.cjs",
+    "start": "node dist/server.cjs",
+    "clean": "rm -rf dist server.js",
+    "lint": "tsc --noEmit",
+    "test": "tsx tests/parser.test.ts"
   },
   "dependencies": {
-    "@zxing/browser": "^0.2.1",
-    "@zxing/library": "^0.23.0",
-    "canvas-confetti": "^1.9.4",
+    "@google/genai": "^2.4.0",
+    "@tailwindcss/vite": "^4.1.14",
+    "@vitejs/plugin-react": "^5.0.4",
+    "dotenv": "^17.2.3",
+    "express": "^4.21.2",
     "html5-qrcode": "^2.3.8",
-    "lucide-react": "^1.31.0",
-    "react": "^19.2.8",
-    "react-dom": "^19.2.8",
-    "tesseract.js": "^7.0.0"
+    "lucide-react": "^0.546.0",
+    "motion": "^12.23.24",
+    "react": "^19.0.1",
+    "react-dom": "^19.0.1",
+    "vite": "^6.2.3"
   },
   "devDependencies": {
-    "@tailwindcss/vite": "^4.3.3",
-    "@types/react": "^19.2.17",
-    "@types/react-dom": "^19.2.3",
-    "@vitejs/plugin-react": "^6.0.4",
-    "concurrently": "^9.1.2",
-    "electron": "^37.0.0",
-    "electron-builder": "^26.0.12",
-    "oxlint": "^1.75.0",
-    "tailwindcss": "^4.3.3",
-    "vite": "^8.2.0",
-    "wait-on": "^8.0.3"
-  },
-  "build": {
-    "appId": "com.nutrisense.ai",
-    "productName": "NutriSense_AI",
-    "files": [
-      "dist/**",
-      "electron/**"
-    ],
-    "directories": {
-      "output": "release"
-    },
-    "win": {
-      "target": [
-        "nsis",
-        "portable"
-      ]
-    },
-    "nsis": {
-      "oneClick": false,
-      "allowToChangeInstallationDirectory": true,
-      "createDesktopShortcut": true,
-      "shortcutName": "NutriSense_AI"
-    }
-  },
-  "allowScripts": {
-    "electron@37.10.3": true,
-    "tesseract.js@7.0.0": true,
-    "electron-winstaller@5.4.0": true
+    "@types/node": "^22.14.0",
+    "autoprefixer": "^10.4.21",
+    "esbuild": "^0.25.0",
+    "tailwindcss": "^4.1.14",
+    "tsx": "^4.21.0",
+    "typescript": "~5.8.2",
+    "vite": "^6.2.3",
+    "@types/express": "^4.17.21"
   }
 }

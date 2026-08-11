@@ -1,0 +1,10 @@
+{
+  "name": "NutriSense_AI",
+  "description": "AI-Powered Food Quality Analysis Application for ingredient parsing, allergen detection, health scoring, and healthier alternatives.",
+  "requestFramePermissions": [
+    "camera"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
