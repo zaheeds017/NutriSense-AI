@@ -34,7 +34,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             <div>
               <div className="flex items-center gap-1.5">
                 <span className="font-bold text-xl tracking-tight text-slate-900">
-                  Nutri<span className="text-emerald-600">Scan</span>
+                  NutriSense-<span className="text-emerald-600">AI</span>
                 </span>
                 <span className="px-1.5 py-0.5 text-[10px] font-bold tracking-wider uppercase rounded-full bg-emerald-100 text-emerald-800">
                   AI v2.5
