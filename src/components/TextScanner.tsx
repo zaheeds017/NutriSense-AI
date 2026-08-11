@@ -80,7 +80,7 @@ export const TextScanner: React.FC<TextScannerProps> = ({ onAnalyzeText, isLoadi
             Paste Ingredients & Nutrition Label Text
           </h3>
           <p className="text-xs text-slate-500 mt-1">
-            Directly paste text from any online store or food product box. NutriSense_AI extracts macros, identifies ingredients, flags food additives, and checks 14 EU/US allergens.
+            Directly paste text from any online store or food product box. NutriSense-AI extracts macros, identifies ingredients, flags food additives, and checks 14 EU/US allergens.
           </p>
         </div>
 

@@ -415,7 +415,7 @@ export default function App() {
       <footer className="bg-white border-t border-slate-200/80 py-6 text-center text-xs text-slate-500">
         <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="font-medium text-slate-700">
-            NutriSense_AI © 2025–2026 — AI-Powered Food Quality Analysis System
+            NutriSense-AI © 2025–2026 — AI-Powered Food Quality Analysis System
           </p>
           <div className="flex items-center gap-4 text-slate-500">
             <span>FDA & EU FSA Standards</span>

@@ -33,7 +33,7 @@ export async function fetchOpenFoodFactsProduct(
 
     const res = await fetch(`https://world.openfoodfacts.org/api/v0/product/${cleanBarcode}.json`, {
       headers: {
-        'User-Agent': 'NutriSense_AI - Web Application - Version 1.0 (contact@NutriSense_AI.app)',
+        'User-Agent': 'NutriSense-AI - Web Application - Version 1.0 (contact@NutriSense-AI.app)',
       },
       signal: controller.signal,
     });

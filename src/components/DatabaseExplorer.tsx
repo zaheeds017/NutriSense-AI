@@ -50,7 +50,7 @@ export const DatabaseExplorer: React.FC<DatabaseExplorerProps> = ({
         <div>
           <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
             <Search className="w-5 h-5 text-emerald-600" />
-            NutriSense_AI Product Database Catalog ({filtered.length} products)
+            NutriSense-AI Product Database Catalog ({filtered.length} products)
           </h2>
           <p className="text-xs text-slate-500 mt-0.5">
             Search pre-verified packaged foods by brand, item name, or UPC barcode. Inspect AI health scores or add to comparison.

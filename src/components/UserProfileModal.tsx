@@ -72,7 +72,7 @@ export const UserProfileModal: React.FC<UserProfileModalProps> = ({
         <div>
           <h2 className="text-xl font-bold text-slate-900">Personal Allergen & Dietary Profile</h2>
           <p className="text-xs text-slate-500">
-            Set your personal health restrictions. NutriSense_AI will automatically cross-reference every scanned product against your profile and highlight safety hazards.
+            Set your personal health restrictions. NutriSense-AI will automatically cross-reference every scanned product against your profile and highlight safety hazards.
           </p>
         </div>
       </div>

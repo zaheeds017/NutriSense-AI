@@ -179,7 +179,7 @@ export const AnalysisResultView: React.FC<AnalysisResultViewProps> = ({
         {/* Score Gauge Box */}
         <div className={`p-6 rounded-2xl border shadow-xs flex flex-col items-center justify-center text-center ${getScoreBg(score)}`}>
           <p className="text-xs font-bold uppercase tracking-widest text-slate-600 mb-2">
-            NutriSense_AI Health Score
+            NutriSense-AI Health Score
           </p>
 
           <div className="relative w-36 h-36 flex items-center justify-center my-2">
@@ -580,7 +580,7 @@ export const AnalysisResultView: React.FC<AnalysisResultViewProps> = ({
 
       {/* Non-Medical Notice Disclaimer */}
       <p className="text-center text-xs text-slate-400 font-medium pt-2">
-        ℹ️ NutriSense_AI general guidance notice — Analysis generated via AI and food science rules engine. Not a substitute for personalized medical advice or prescription diet therapy.
+        ℹ️ NutriSense-AI general guidance notice — Analysis generated via AI and food science rules engine. Not a substitute for personalized medical advice or prescription diet therapy.
       </p>
     </div>
   );

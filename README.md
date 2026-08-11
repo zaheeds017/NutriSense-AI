@@ -1,6 +1,6 @@
-# NutriSense_AI — AI-Powered Mobile & Web Application for Ingredient-Based Food Quality Analysis
+# NutriSense-AI — AI-Powered Mobile & Web Application for Ingredient-Based Food Quality Analysis
 
-NutriSense_AI is an AI-powered food quality analysis platform that allows consumers to scan product barcodes, capture ingredient/nutrition labels via OCR, or paste label text. It extracts structured nutrition data, evaluates ingredient toxicity, detects allergens against personal profiles, computes UK/EU FSA Traffic Light ratings, and calculates an unbiased 1–10 Health Score.
+NutriSense-AI is an AI-powered food quality analysis platform that allows consumers to scan product barcodes, capture ingredient/nutrition labels via OCR, or paste label text. It extracts structured nutrition data, evaluates ingredient toxicity, detects allergens against personal profiles, computes UK/EU FSA Traffic Light ratings, and calculates an unbiased 1–10 Health Score.
 
 ---
 
@@ -51,10 +51,10 @@ npm start
 
 ## 🤖 AI / Mock Mode Toggle
 
-NutriSense_AI includes a seamless fallback system that allows it to operate either fully online with Gemini AI or 100% offline with zero API keys.
+NutriSense-AI includes a seamless fallback system that allows it to operate either fully online with Gemini AI or 100% offline with zero API keys.
 
 - **Real AI Mode (Gemini 3.6 Flash)**: Set `GEMINI_API_KEY` in `.env` or system environment secrets. Gemini performs OCR, extracts structured JSON, and generates tailored nutritional advice.
-- **Mock / Offline Mode (Rule-Based Engine)**: If `GEMINI_API_KEY` is omitted or unavailable, NutriSense_AI automatically switches to its offline food-science rule engine (`server/rulesEngine.ts`), computing UK/EU Traffic Light colors, ingredient health flags, and 1–10 scores offline.
+- **Mock / Offline Mode (Rule-Based Engine)**: If `GEMINI_API_KEY` is omitted or unavailable, NutriSense-AI automatically switches to its offline food-science rule engine (`server/rulesEngine.ts`), computing UK/EU Traffic Light colors, ingredient health flags, and 1–10 scores offline.
 
 ---
 
@@ -92,4 +92,4 @@ NutriSense_AI includes a seamless fallback system that allows it to operate eith
 ---
 
 ## ⚖️ Non-Medical Advice Notice
-NutriSense_AI provides nutritional guidance based on public health standards (FDA, EU FSA, WHO, NOVA). It is not a substitute for clinical medical advice or medical nutrition therapy.
+NutriSense-AI provides nutritional guidance based on public health standards (FDA, EU FSA, WHO, NOVA). It is not a substitute for clinical medical advice or medical nutrition therapy.

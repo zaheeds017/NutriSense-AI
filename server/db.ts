@@ -10,7 +10,7 @@ import {
 import { analyzeProductRules, parseIngredientsText, detectAllergens } from './rulesEngine.js';
 
 const DATA_DIR = path.join(process.cwd(), 'data');
-const DB_FILE = path.join(DATA_DIR, 'NutriSense_AI_db.json');
+const DB_FILE = path.join(DATA_DIR, 'NutriSense-AI_db.json');
 
 interface DatabaseSchema {
   products: ProductRecord[];

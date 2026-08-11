@@ -1,4 +1,4 @@
-// Human Face Detector Utility for NutriSense_AI
+// Human Face Detector Utility for NutriSense-AI
 // Accurately detects human faces in video frames, camera streams, and uploaded images.
 
 export interface FaceDetectionResult {

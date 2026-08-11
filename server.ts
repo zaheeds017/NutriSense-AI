@@ -187,7 +187,7 @@ app.post('/api/scan/barcode', async (req, res) => {
       return res.json({ found: true, product, analysis: product.analysis });
     }
 
-    // 2. Fetch live product data from Open Food Facts API (rezahedi/NutriSense_AI integration)
+    // 2. Fetch live product data from Open Food Facts API (rezahedi/NutriSense-AI integration)
     const userPrefs = db.getUserPreferences();
     const offAnalysis = await fetchOpenFoodFactsProduct(barcode, userPrefs);
 
@@ -294,13 +294,13 @@ async function startServer() {
       if (fs.existsSync(indexPath)) {
         res.sendFile(indexPath);
       } else {
-        res.status(200).send('<h1>NutriSense_AI API is running.</h1><p>Static frontend is served separately.</p>');
+        res.status(200).send('<h1>NutriSense-AI API is running.</h1><p>Static frontend is served separately.</p>');
       }
     });
   }
 
   app.listen(PORT, '0.0.0.0', () => {
-    console.log(`NutriSense_AI Server running on http://localhost:${PORT}`);
+    console.log(`NutriSense-AI Server running on http://localhost:${PORT}`);
   });
 }
 

@@ -1,5 +1,5 @@
 /**
- * NutriSense_AI Types & JSON Contract Interfaces
+ * NutriSense-AI Types & JSON Contract Interfaces
  */
 
 export interface MacroValue {
@@ -59,7 +59,7 @@ export interface HealthData {
 }
 
 /**
- * Strict JSON Contract specified in NutriSense_AI Dissertation
+ * Strict JSON Contract specified in NutriSense-AI Dissertation
  */
 export interface AnalysisResultContract {
   serving_info: ServingInfo;

@@ -59,7 +59,7 @@ export const CommunityAddModal: React.FC<CommunityAddModalProps> = ({ onAddProdu
         <div>
           <h2 className="text-xl font-bold text-slate-900">Contribute New Packaged Food</h2>
           <p className="text-xs text-slate-500">
-            Submit a new food product to the open NutriSense_AI community database. AI will analyze the ingredients and calculate a health score instantly.
+            Submit a new food product to the open NutriSense-AI community database. AI will analyze the ingredients and calculate a health score instantly.
           </p>
         </div>
       </div>

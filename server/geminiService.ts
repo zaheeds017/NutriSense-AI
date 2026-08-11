@@ -21,9 +21,9 @@ try {
 }
 
 if (!systemPromptText) {
-  systemPromptText = `You are NutriSense_AI AI, an expert food scientist and nutritionist.
+  systemPromptText = `You are NutriSense-AI AI, an expert food scientist and nutritionist.
 Analyze the food product inputs (OCR image or text label) and extract structured macros, serving info, ingredients, allergens, and compute a 1-10 health score with ingredient flags and dietary compatibility.
-Return strict JSON complying with the NutriSense_AI schema.`;
+Return strict JSON complying with the NutriSense-AI schema.`;
 }
 
 /**

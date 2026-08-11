@@ -2,7 +2,7 @@ import assert from 'node:assert';
 import { parseIngredientsText, detectAllergens, computeTrafficLights, analyzeProductRules } from '../server/rulesEngine.js';
 import { Macros, ServingInfo } from '../src/types.js';
 
-console.log('🧪 Running NutriSense_AI Unit Tests...\n');
+console.log('🧪 Running NutriSense-AI Unit Tests...\n');
 
 // --- TEST 1: US FDA Label Parsing ---
 console.log('1️⃣ Testing US FDA Label Ingredient & Allergen Parser...');
@@ -79,4 +79,4 @@ assert.ok(cleanAnalysis.score >= 8.5, 'Whole food cereal should score >= 8.5/10'
 assert.strictEqual(cleanAnalysis.overall, 'Excellent');
 console.log('✅ Clean Whole Food Test Passed!');
 
-console.log('\n🎉 ALL NutriSense_AI PARSER & API TESTS PASSED SUCCESSFULLY!');
+console.log('\n🎉 ALL NutriSense-AI PARSER & API TESTS PASSED SUCCESSFULLY!');
