@@ -5,8 +5,10 @@ import {
   ProductRecord,
   ScanHistoryRecord,
   AlternativeProduct,
+  NavTab,
 } from './types';
 import { Navbar } from './components/Navbar';
+import { DashboardView } from './components/DashboardView';
 import { BarcodeScanner } from './components/BarcodeScanner';
 import { LabelScanner } from './components/LabelScanner';
 import { TextScanner } from './components/TextScanner';
@@ -20,9 +22,7 @@ import { Barcode, Camera, AlignLeft, AlertCircle, RefreshCw, Sparkles } from 'lu
 import { playSuccessChime } from './lib/sound';
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState<
-    'scan' | 'explore' | 'compare' | 'history' | 'profile' | 'contribute'
-  >('scan');
+  const [activeTab, setActiveTab] = useState<NavTab>('home');
   const [scanMode, setScanMode] = useState<'barcode' | 'image' | 'text'>('barcode');
 
   const [currentAnalysis, setCurrentAnalysis] = useState<AnalysisResultContract | null>(null);
@@ -251,6 +251,21 @@ export default function App() {
 
       {/* Main Container */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+        {/* TAB 0: WELCOME DASHBOARD */}
+        {activeTab === 'home' && (
+          <DashboardView
+            products={products}
+            history={history}
+            userPrefs={userPrefs}
+            compareCount={compareList.length}
+            onNavigate={setActiveTab}
+            onSelectScan={(analysis) => {
+              setCurrentAnalysis(analysis);
+              setActiveTab('scan');
+            }}
+          />
+        )}
+
         {/* TAB 1: SCANNER & ANALYSIS OUTCOME */}
         {activeTab === 'scan' && (
           <div className="space-y-6">

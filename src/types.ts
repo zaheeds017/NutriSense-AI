@@ -117,3 +117,5 @@ export interface AlternativeProduct {
   imageUrl?: string;
   analysis: AnalysisResultContract;
 }
+
+export type NavTab = 'home' | 'scan' | 'explore' | 'compare' | 'history' | 'profile' | 'contribute';

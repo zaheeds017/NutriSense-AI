@@ -10,3 +10,4 @@ coverage/
 data/
 
 .vercel
+git_tmp/

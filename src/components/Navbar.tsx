@@ -1,10 +1,10 @@
 import React from 'react';
-import { Camera, Search, Scale, History, User, PlusCircle, ShieldAlert, Sparkles } from 'lucide-react';
-import { UserPreferences } from '../types';
+import { LayoutDashboard, Camera, Search, Scale, History, User, PlusCircle, ShieldAlert, Sparkles } from 'lucide-react';
+import { UserPreferences, NavTab } from '../types';
 
 interface NavbarProps {
-  activeTab: 'scan' | 'explore' | 'compare' | 'history' | 'profile' | 'contribute';
-  setActiveTab: (tab: 'scan' | 'explore' | 'compare' | 'history' | 'profile' | 'contribute') => void;
+  activeTab: NavTab;
+  setActiveTab: (tab: NavTab) => void;
   userPrefs: UserPreferences;
   compareCount: number;
 }
@@ -24,7 +24,7 @@ export const Navbar: React.FC<NavbarProps> = ({
         <div className="flex items-center justify-between h-16">
           {/* Brand Logo */}
           <button
-            onClick={() => setActiveTab('scan')}
+            onClick={() => setActiveTab('home')}
             className="flex items-center gap-2.5 group text-left cursor-pointer focus:outline-none"
             id="brand-logo-btn"
           >
@@ -48,6 +48,19 @@ export const Navbar: React.FC<NavbarProps> = ({
 
           {/* Nav Tabs */}
           <nav className="flex items-center gap-1 sm:gap-2">
+            <button
+              onClick={() => setActiveTab('home')}
+              id="nav-tab-home"
+              className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-medium transition-all ${
+                activeTab === 'home'
+                  ? 'bg-emerald-600 text-white shadow-sm shadow-emerald-600/20'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+              }`}
+            >
+              <LayoutDashboard className="w-4 h-4" />
+              <span className="hidden lg:inline">Home</span>
+            </button>
+
             <button
               onClick={() => setActiveTab('scan')}
               id="nav-tab-scan"
